@@ -26,4 +26,5 @@ Run at [http://localhost:3000](http://localhost:3000)
 ## Project Preview
 
 ## Developer
-**Chaiyut**
+**Name**: **Chaiyut Tavon** 
+**Studen ID**: **663450037-1** 
