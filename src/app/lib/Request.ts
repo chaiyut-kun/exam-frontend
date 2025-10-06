@@ -29,10 +29,19 @@ export async function GetMembers() {
   }
 }
 
-export async function GetStatus() {
+export async function GetAllStatus() {
   try {
 
     const status = await axios.get('/api/status')
+    return status
+  } catch (err) {
+    console.error(err)
+    throw err
+  }
+}
+export async function GetStatus(statusId?: string) {
+  try {
+    const status = await axios.get(`/api/status/${statusId}`)
     return status
   } catch (err) {
     console.error(err)
@@ -53,10 +62,12 @@ export async function PostStatus(content : string) {
   }
 }
 
-export async function CommentStatus(statusId: string, comment: string) {
+export async function CommentStatus(statusId: string, content: string) {
   try {
 
-    const CommentStatus = await axios.post('/api/status/comment', {statusId, comment})
+    const CommentStatus = await axios.post('/api/status/comment', {content, statusId})
+
+    return CommentStatus
 
   } catch (err) {
     console.error(err)

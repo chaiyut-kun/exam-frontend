@@ -6,21 +6,21 @@ const baseUrl = process.env.BASE_URL;
 const apikey = process.env.API_KEY;
 const token = process.env.TOKEN_KEY;
 
-export async function POST(req: NextRequest) {
-    const body = await req.json();
+export async function GET(request: Request, { params }: { params: { id: string } }) {
 
     try {
-
-        const status = await axios.post(`${baseUrl}/comment`, body, {
+        const { id } = params;
+        const response = await axios.get(`${baseUrl}/status/${id}`, {
             headers: {
                 "x-api-key": apikey,
                 'Authorization': `Bearer ${token}`
-            },
-        });
+            }
+        })
 
-        return NextResponse.json(status.data, { status: status.status });
-
+        return NextResponse.json(response.data, { status: response.status });
     } catch (err) {
-        NextResponse.error();
+        console.error(err)
+        throw err
     }
+    
 }

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button, Modal, Typography, Box, TextField, Grid, Link } from '@mui/material'
 import NavHeader from "@/components/NavHeader";
 import Status from "@/components/Status";
-import { GetStatus } from "./lib/Request";
+import { GetAllStatus } from "./lib/Request";
 import { StatusIF } from "@/types/Status";
 
 export default function Home() {
@@ -13,23 +13,23 @@ export default function Home() {
   const router = useRouter();
   const [statusContent, setStatusContent] = useState([]);
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   if (!localStorage.getItem("token")) {
-  //     router.push('/login')
+    // if (!localStorage.getItem("token")) {
+    //   router.push('/login')
 
-  //   }
-  // }, [])
+    // }
+    fetchStatus();
+  }, [])
 
   const fetchStatus = async () => {
-    const res = await GetStatus();
+    const res = await GetAllStatus();
     if (res.status === 200) {
       setStatusContent(res.data.data);
       console.log(res.data)
     }
   }
 
-  fetchStatus();
   console.log("fetch status")
 
   
@@ -44,7 +44,8 @@ export default function Home() {
       <Box className='bg-blue-50 border border-0.5 border-slate-500 rounded py-8 px-64 mt-4'>
 
         {statusContent.map((status : StatusIF, key) => (
-          <Status key={key} statusId={status.statusId} comments={status.comments} content={status.content} createdBy={status.createdBy} likes={status.likes}/>
+          console.log("comment",status.comment),
+          <Status key={key} _id={status._id} comment={status.comment} content={status.content} createdBy={status.createdBy} like={status.like}/>
         ))}
 
       </Box >

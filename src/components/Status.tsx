@@ -1,23 +1,53 @@
-import React, { useState, } from 'react'
+import React, { useEffect, useState, } from 'react'
 import { useRouter } from "next/navigation";
 import { Button, Modal, Typography, Box, Grid, TextField, Avatar } from '@mui/material'
 import { deepOrange } from '@mui/material/colors';
 import { StatusIF } from '@/types/Status';
-import { CommentStatus } from '@/app/lib/Request';
+import { CommentStatus, GetStatus } from '@/app/lib/Request';
 
-function Status({ statusId, content, likes, comments, createdBy }: StatusIF) {
+function Status({ _id, content, like, comment, createdBy }: StatusIF) {
     const router = useRouter();
 
     // comment modal 
     const [open, setOpen] = useState(false);
-    const [comment, setComment] = useState('');
-    const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setComment(event.target.value);
-    };
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => {
+    // my comment
+    const [myComment, setMyComment] = useState('');
+    const [isSend, setIsSend] = useState(false);
+    // users comments
+    const [allComments, setAllComments] = useState(comment);
+    
+    useEffect(() => {
 
-        // const response = CommentStatus("statusId", comment);
+        const fetchComment = async () => {
+            const res = await GetStatus(_id);
+            if (res.status === 200) {
+                setAllComments(res.data.data.comment);
+                console.log("fetch comment", res.data.data.comment)
+            }
+        }
+        fetchComment();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+        
+    }, [isSend])
+
+    const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setMyComment(event.target.value);
+    };
+    const handleOpen = async () => {
+        setAllComments(comment);
+        console.log("all comment", allComments)
+        setOpen(true);
+    }
+
+    const handleSendComment = async () => {
+        if (myComment === '') return;
+        
+        setIsSend(!isSend)
+        
+        const response = await CommentStatus(_id, myComment);
+        console.log(response)
+    }
+    const handleClose = async () => {
 
         setOpen(false);
     }
@@ -38,7 +68,7 @@ function Status({ statusId, content, likes, comments, createdBy }: StatusIF) {
             {/* content 1 */}
             < Box className='p-4 my-2 bg-slate-200 rounded-2xl' >
                 {/* user */}
-                <Box>
+                <Box className='flex items-center gap-2'>
                     <Avatar sx={{ bgcolor: deepOrange[500] }}></Avatar>
                     < Typography variant="h6" component="h2" className="text-slate-900 font-bold" >
                         {createdBy.email}
@@ -66,18 +96,32 @@ function Status({ statusId, content, likes, comments, createdBy }: StatusIF) {
                         aria-describedby="modal-modal-description"
                     >
                         <Box sx={style}>
-                            <Typography id="modal-modal-title" variant="h6" component="h2" className="text-slate-900">
-                                Comment
-                            </Typography>
+                            <Box className="flex justify-between items-center">
+                                <Typography id="modal-modal-title" variant="h6" component="h2" className="text-slate-900">
+                                    Comment
+                                </Typography>
+                                <Box className="flex justify-between items-center">
+                                    <Button onClick={handleSendComment}>Send</Button>
+                                    <Button onClick={handleClose} variant='contained' color='error'>Close</Button>
+                                </Box>
+                            </Box>
+
                             <TextField onChange={handleCommentChange} id="modal-modal-description" sx={{ mt: 2 }} fullWidth label="Your comment" variant="outlined" className="text-slate-900">
                             </TextField>
 
                             {/* all comments */}
-                            <Box sx={{ mt: 2, maxHeight: 200, overflow: 'auto' }}>
-                                u
+                            <Box className="mt-2">
+                                {/* list comments */}
+                                {allComments && allComments.map((val, key) => (
+                                    <Box className="flex items-center gap-2 my-2" key={key}>
+                                        <Avatar sx={{ bgcolor: deepOrange[500] }}></Avatar>
+                                        <Typography sx={{ fontSize: 14 }} className="text-slate-900 font-bold">{val.content}</Typography>
+                                    </Box>
+                                ))}
+
                             </Box>
 
-                            <Button sx={{ mt: 2 }} onClick={handleClose}>Send</Button>
+
                         </Box>
                     </Modal>
 

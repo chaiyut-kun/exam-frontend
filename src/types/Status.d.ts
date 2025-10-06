@@ -1,12 +1,12 @@
 interface StatusIF {
-  statusId: string;
+  _id: string;
   content: string;
   createdBy: {
     email: string;
     _id: string;
   }
-  likes: object[];
-  comments: object[];
+  like: object[];
+  comment: object[];
 }
 
 
