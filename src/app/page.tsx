@@ -15,10 +15,10 @@ export default function Home() {
 
   useEffect(() => {
 
-    // if (!localStorage.getItem("token")) {
-    //   router.push('/login')
+    if (!localStorage.getItem("token")) {
+      router.push('/login')
 
-    // }
+    }
     fetchStatus();
   }, [])
 

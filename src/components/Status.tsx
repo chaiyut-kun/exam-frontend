@@ -18,16 +18,16 @@ function Status({ _id, content, like, comment, createdBy }: StatusIF) {
     const [allComments, setAllComments] = useState(comment);
     // is Liked
     const [isLiked, setIsLiked] = useState(false);
-
+    
+    const fetchComment = async () => {
+        const res = await GetStatus(_id);
+        if (res.status === 200) {
+            setAllComments(res.data.data.comment);
+            console.log("fetch comment", res.data.data.comment)
+        }
+    }
     useEffect(() => {
 
-        const fetchComment = async () => {
-            const res = await GetStatus(_id);
-            if (res.status === 200) {
-                setAllComments(res.data.data.comment);
-                console.log("fetch comment", res.data.data.comment)
-            }
-        }
 
         const fetchLike = async () => {
             const res = await GetProfile();
@@ -69,7 +69,7 @@ const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMyComment(event.target.value);
 };
 const handleOpen = async () => {
-    setAllComments(comment);
+    fetchComment();
     console.log("all comment", allComments)
     setOpen(true);
 }
@@ -78,8 +78,11 @@ const handleSendComment = async () => {
     if (myComment === '') return;
 
     setIsSend(!isSend)
-
+    
     const response = await CommentStatus(_id, myComment);
+
+    setMyComment('');
+    fetchComment();
     console.log(response)
 }
 const handleClose = async () => {
@@ -141,7 +144,7 @@ return (
                             </Box>
                         </Box>
 
-                        <TextField onChange={handleCommentChange} id="modal-modal-description" sx={{ mt: 2 }} fullWidth label="Your comment" variant="outlined" className="text-slate-900">
+                        <TextField onChange={handleCommentChange} value={myComment}  id="modal-modal-description" sx={{ mt: 2 }} fullWidth label="Your comment" variant="outlined" className="text-slate-900">
                         </TextField>
 
                         {/* all comments */}
