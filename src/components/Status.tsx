@@ -32,7 +32,7 @@ function Status({ _id, content, like, comment, createdBy}: StatusIF, ) {
         const fetchLike = async () => {
             const res = await GetProfile();
             if (res.status === 200) {
-                const userId = res.data.data._id;
+                const userId = res.data._id;
                 // check if user already like this post
                 const Liked = like.some((item) => item._id === userId);
                 setIsLiked(Liked);
@@ -150,7 +150,7 @@ return (
                         </TextField>
 
                         {/* all comments */}
-                        <Box className="mt-2">
+                        <Box className="mt-2 overflow-y-scroll" sx={{ maxHeight: 200 }}>
                             {/* list comments */}
                             {allComments && allComments.map((val, key) => (
                                 <Box className="flex items-center gap-2 my-2" key={key}>

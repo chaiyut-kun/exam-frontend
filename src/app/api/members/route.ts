@@ -6,7 +6,8 @@ const baseUrl = process.env.BASE_URL;
 const apikey = process.env.API_KEY;
 const token = process.env.TOKEN_KEY;
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const token = req.nextUrl.searchParams.get("t");
   try {
     const members = await axios.get(`${baseUrl}/class/2023`, {
       headers: {

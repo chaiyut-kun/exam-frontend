@@ -24,13 +24,14 @@ export default function Home() {
 
   const fetchStatus = async () => {
     const res = await GetAllStatus();
-    if (res.status === 200) {
-      setStatusContent(res.data.data);
-      console.log(res.data)
+    console.log("res", res.data)
+    if (res.data) {
+      setStatusContent(res.data);
     }
   }
 
   console.log("fetch status")
+  console.log(statusContent)
 
   
 

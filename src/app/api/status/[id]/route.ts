@@ -4,14 +4,18 @@ import { NextRequest, NextResponse } from "next/server";
 
 const baseUrl = process.env.BASE_URL;
 const apikey = process.env.API_KEY;
-const token = process.env.TOKEN_KEY;
 
 export async function GET(
-  request: Request,
+  req: NextRequest, { params }: { params: Promise<{ id?: string }> }
 ) {
   try {
-    const body = await request.json();
-    const { id } = body;
+    const {id} = await params;
+    const token = req.nextUrl.searchParams.get("t");
+    if (!id) {
+      console.log("Missing id");
+      console.log("params", params);
+      return NextResponse.json({ message: "Missing id" }, { status: 400 });
+    }
     const response = await axios.get(`${baseUrl}/status/${id}`, {
       headers: {
         "x-api-key": apikey,

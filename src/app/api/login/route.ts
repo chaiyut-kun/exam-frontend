@@ -7,6 +7,7 @@ const apikey = process.env.API_KEY;
 
 export async function POST(req: NextRequest) {
   const body = (await req.json()) as LoginITF;
+
   try {
     const login = await axios.post(`${baseUrl}/signin`, body, {
       headers: {
@@ -17,9 +18,10 @@ export async function POST(req: NextRequest) {
     
     });
 
-    return NextResponse.json(login.data, {status: login.status})
+    return NextResponse.json({data: login.data.data, status: login.status})
     
   } catch (err) {
+    console.error(err);
     return NextResponse.error();
   }
 }

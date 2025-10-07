@@ -4,9 +4,11 @@ import axios from "axios";
 export async function Login({ email, password }: LoginITF) {
   try {
     const login = await axios.post("/api/login", { email, password });
-    localStorage.setItem("token", login.data.token);
+    const response = login.data;
+    console.log("response:", response);
+    localStorage.setItem("token", response.data.token);
 
-    return login;
+    return response;
   } catch (err) {
     console.error(err);
     throw err;
@@ -15,7 +17,7 @@ export async function Login({ email, password }: LoginITF) {
 
 export async function GetMembers() {
   try {
-    const members = await axios.get("/api/members");
+    const members = await axios.get("/api/members?t=" + localStorage.getItem("token"));
 
     return members;
   } catch (err) {
@@ -26,8 +28,10 @@ export async function GetMembers() {
 
 export async function GetAllStatus() {
   try {
-    const status = await axios.get("/api/status");
-    return status;
+    const status = await axios.get("/api/status/?t=" + localStorage.getItem("token"));
+    const response = status.data;
+    console.log("status", response.data);
+    return response.data;
   } catch (err) {
     console.error(err);
     throw err;
@@ -35,7 +39,9 @@ export async function GetAllStatus() {
 }
 export async function GetStatus(statusId?: string) {
   try {
-    const status = await axios.get(`/api/status/${statusId}`);
+    const status = await axios.get(`/api/status/${statusId}?t=` + localStorage.getItem("token"));
+    const response = status.data;
+    console.log("status", response);
     return status;
   } catch (err) {
     console.error(err);
@@ -59,9 +65,13 @@ export async function CommentStatus(statusId: string, content: string) {
     const CommentStatus = await axios.post("/api/status/comment", {
       content,
       statusId,
+      token: localStorage.getItem("token"),
     });
 
-    return CommentStatus;
+    const response = CommentStatus.data;
+    console.log("comment", response);
+
+    return response;
   } catch (err) {
     console.error(err);
     throw err;
@@ -70,8 +80,10 @@ export async function CommentStatus(statusId: string, content: string) {
 
 export async function GetProfile() {
   try {
-    const profile = await axios.get("/api/profile");
-    return profile;
+    const profile = await axios.get("/api/profile?t=" + localStorage.getItem("token"));
+    const response = profile.data;
+    console.log("profile", response);
+    return response;
   } catch (err) {
     console.error(err);
     throw err;
@@ -80,8 +92,10 @@ export async function GetProfile() {
 
 export async function LikeStatus(statusId: string) {
   try {
-    const like = await axios.post(`/api/like`, {statusId});
-    return like;
+    const token = localStorage.getItem('token')
+    const like = await axios.post(`/api/like`, { statusId, token});
+    const response = like.data;
+    return response;
   } catch (err) {
     console.error(err);
     throw err;
@@ -90,7 +104,7 @@ export async function LikeStatus(statusId: string) {
 
 export async function UnLikeStatus(statusId: string) {
   try {
-    const unlike = await axios.delete(`/api/like`, {data: {statusId}});
+    const unlike = await axios.delete(`/api/like`, { data: { statusId, token: localStorage.getItem('token') } });
     return unlike;
   } catch (err) {
     console.error(err);

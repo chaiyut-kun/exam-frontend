@@ -5,21 +5,25 @@ import { NextRequest, NextResponse } from "next/server";
 
 const baseUrl = process.env.BASE_URL;
 const apikey = process.env.API_KEY;
-const token = process.env.TOKEN_KEY;
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
+  const { statusId, token } = body;
 
+  console.log(token)
   try {
-    const status = await axios.post(`${baseUrl}/like`, body, {
+    const status = await axios.post(`${baseUrl}/like`, {statusId}, {
       headers: {
         "x-api-key": apikey,
         Authorization: `Bearer ${token}`,
       },
     });
-    return NextResponse.json(status.data, { status: status.status });
+
+    
+    
+    return NextResponse.json({data: status.data,  status: status.status });
   } catch (err) {
-    NextResponse.error();
+    return NextResponse.error();
   }
 }
 
@@ -27,8 +31,7 @@ export async function DELETE(
   req: NextRequest,
 ) {
   const body = await req.json();
-  const { statusId} = body
-  console.log("body", statusId);
+  const { statusId, token} = body
   try {
     const status = await axios.delete(`${baseUrl}/like`,  {
       headers: {
