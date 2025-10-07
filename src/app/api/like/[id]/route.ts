@@ -8,18 +8,20 @@ const token = process.env.TOKEN_KEY;
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
 ) {
-  const { id } = params;
+  const { id } = await req.json();
+  console.log("id", id);
   try {
-    const status = await axios.delete(`${baseUrl}/unlike${id}`, {
+    const status = await axios.delete(`${baseUrl}/unlike`,  {
       headers: {
         "x-api-key": apikey,
         Authorization: `Bearer ${token}`,
       },
+      data: { statusId: id }
     });
     return NextResponse.json(status.data, { status: status.status });
   } catch (err) {
-    NextResponse.error();
+    console.error("delete like failed", err);
+    return NextResponse.json({ message: "Unable to unlike" }, { status: 500 });
   }
 }

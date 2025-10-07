@@ -90,7 +90,7 @@ export async function LikeStatus(statusId: string) {
 
 export async function UnLikeStatus(statusId: string) {
   try {
-    const unlike = await axios.delete(`/api/like/${statusId}`);
+    const unlike = await axios.delete(`/api/like`, {data: {statusId}});
     return unlike;
   } catch (err) {
     console.error(err);

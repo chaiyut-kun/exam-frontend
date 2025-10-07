@@ -1,3 +1,4 @@
+import { Boy } from "@mui/icons-material";
 import axios from "axios";
 
 import { NextRequest, NextResponse } from "next/server";
@@ -19,5 +20,26 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(status.data, { status: status.status });
   } catch (err) {
     NextResponse.error();
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+) {
+  const body = await req.json();
+  const { statusId} = body
+  console.log("body", statusId);
+  try {
+    const status = await axios.delete(`${baseUrl}/like`,  {
+      headers: {
+        "x-api-key": apikey,
+        Authorization: `Bearer ${token}`,
+      },
+      data: { statusId: statusId }
+    });
+    return NextResponse.json(status.data, { status: status.status });
+  } catch (err) {
+    console.error("delete like failed", err);
+    return NextResponse.json({ message: "Unable to unlike" }, { status: 500 });
   }
 }

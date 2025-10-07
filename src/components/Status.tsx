@@ -51,6 +51,7 @@ function Status({ _id, content, like, comment, createdBy }: StatusIF) {
     const handleLike = async () => {
         const next = !isLiked;
         console.log("next", next)
+        console.log("id", _id)
         setIsLiked(next);
         try {
             if (next) {
@@ -120,7 +121,7 @@ return (
             {/* Action Button */}
             < Grid container spacing={2} sx={{ mt: 2 }}>
                 <Grid >
-                    <Button onClick={() => handleLike(!isLiked)} variant={isLiked ? "contained" : "outlined"} color={isLiked ? `success` : 'info'} className="text-slate-900 border-slate-900 hover:bg-slate-200">Like</Button>
+                    <Button onClick={handleLike} variant={isLiked ? "contained" : "outlined"} color={isLiked ? `success` : 'info'} className="text-slate-900 border-slate-900 hover:bg-slate-200">Like</Button>
                 </Grid>
                 <Grid >
                     <Button onClick={handleOpen} variant="outlined" className="text-slate-900 border-slate-900 hover:bg-slate-200">Comment</Button>
