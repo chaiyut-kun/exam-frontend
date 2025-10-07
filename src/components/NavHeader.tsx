@@ -3,7 +3,7 @@ import { Box, Button, Modal, Typography, TextField, Link } from '@mui/material'
 import { useRouter } from 'next/navigation';
 import { PostStatus } from '@/app/lib/Request';
 
-function NavHeader() {
+function NavHeader({fetchStatus}: {fetchStatus: () => void}) {
     const router = useRouter();
     
     // content
@@ -21,6 +21,7 @@ function NavHeader() {
         if (response.status === 200) {
             console.log("post", response.data.data)
             setOpen(false);
+            fetchStatus();
         }
         
     }

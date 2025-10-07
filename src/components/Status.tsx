@@ -6,7 +6,7 @@ import { StatusIF } from '@/types/Status';
 import { CommentStatus, GetStatus, GetProfile, LikeStatus, UnLikeStatus } from '@/app/lib/Request';
 
 
-function Status({ _id, content, like, comment, createdBy }: StatusIF) {
+function Status({ _id, content, like, comment, createdBy}: StatusIF, ) {
     const router = useRouter();
 
     // comment modal 
@@ -84,6 +84,7 @@ const handleSendComment = async () => {
 
     setMyComment('');
     fetchComment();
+    
     console.log(response)
 }
 const handleClose = async () => {

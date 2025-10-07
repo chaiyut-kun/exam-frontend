@@ -38,14 +38,14 @@ export default function Home() {
   return (
     <>
 
-      <NavHeader />
+      <NavHeader fetchStatus={fetchStatus} />
 
       {/* contents */}
       <Box className='bg-blue-50 border border-0.5 border-slate-500 rounded py-8 px-64 mt-4'>
 
         {statusContent.map((status : StatusIF, key) => (
           console.log("comment",status.comment),
-          <Status key={key} _id={status._id} comment={status.comment} content={status.content} createdBy={status.createdBy} like={status.like}/>
+          <Status  key={key} _id={status._id} comment={status.comment} content={status.content} createdBy={status.createdBy} like={status.like}/>
         ))}
 
       </Box >
